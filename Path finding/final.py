@@ -4,7 +4,6 @@ import pygame
 import heapq
 import random
 
-
 def convert_grid_to_graph(grid):
     moves=[[1,0],[-1,0],[0,-1],[0,1]]
     graph=defaultdict(dict)
@@ -149,7 +148,7 @@ def dfs(grid,start,end,screen,GRID_SIZE):
     else:
         return []
 
-def main(input_grid,path_algo,screen,GRID_SIZE,start,end):
+def backend_main(input_grid,path_algo,screen,GRID_SIZE,start,end):
     if path_algo==1:
         return_val = dfs(input_grid,start,end,screen,GRID_SIZE)
         if return_val:
@@ -225,17 +224,74 @@ def main(input_grid,path_algo,screen,GRID_SIZE,start,end):
 
 pygame.init()
 pygame.mixer.init()
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+RED = (255, 0, 0)
+ORANGE = (204, 85, 0) 
+LIGHT_ORANGE = (255, 200, 100)
+
+pygame.display.set_caption("Welcome")
+screen = pygame.display.set_mode((1000, 700))
+running =  True
+text_font=pygame.font.SysFont("Arial",30)
+
+def draw_text(text,font,color,x,y):
+        img=font.render(text,True,color)
+        screen.blit(img,(x,y))
+
+# popup_text = '''
+line1="Welcome to Path Finder!!"
+line2="Instructions :-"
+
+line3="    1) Use (click and drag) mouse to draw walls."
+
+line4="    2) Press h (hard clear) to clear the screen completely."
+
+line5="    3) Press c (clear) to clear only the path and not the walls."
+
+line6="    4) Press g to generate a random maze."
+
+line7="    5) After drawing the path press from 1-4 for :-"
+
+line8="        1 - dfs search"
+line9="        2 - bfs search"
+line10="       3 - Dijkstra search"
+line11="       4 - A* search"
+
+line12="Created by - TRK Aashish "
+linex="press s to begin"
+while running:
+    screen.fill((255,255,255))
+    draw_text(line1,text_font,(0,0,0),0,0)
+    draw_text(line2,text_font,(0,0,0),0,50)
+    draw_text(line3,text_font,(0,0,0),0,100)
+    draw_text(line4,text_font,(0,0,0),0,150)
+    draw_text(line5,text_font,(0,0,0),0,200)
+    draw_text(line6,text_font,(0,0,0),0,250)
+    draw_text(line7,text_font,(0,0,0),0,300)
+    draw_text(line8,text_font,(0,0,0),0,350)
+    draw_text(line9,text_font,(0,0,0),0,400)
+    draw_text(line10,text_font,(0,0,0),0,450)
+    draw_text(line11,text_font,(0,0,0),0,500)
+    draw_text(line12,text_font,(0,0,0),0,550)
+    draw_text(linex,text_font,(0,0,0),0,600)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_s:
+                running = False
+
+    
+    pygame.display.flip()
+
+pygame.quit()
 
 WIDTH, HEIGHT = 700, 700 
 ROWS, COLS = 50, 50  
 GRID_SIZE = WIDTH // COLS
 
 
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-RED = (255, 0, 0)
-ORANGE = (204, 85, 0) 
-LIGHT_ORANGE = (255, 200, 100)
 
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -256,9 +312,7 @@ def recursive_backtracker(grid, x, y):
             grid[next_x][next_y] = 0
             recursive_backtracker(grid, next_x, next_y)
 
-# Generate a maze
 def generate_maze(grid):
-    #grid = create_grid(rows, cols)
     start_x, start_y = 1, 1
 
     grid[start_x][start_y] = 0
@@ -317,8 +371,6 @@ def draw_grid_with_visited_complex(screen, grid, visited,perma_visited, GRID_SIZ
     pygame.display.flip()
 
 
-#def draw_rectangle(row, col, color):
-#    pygame.draw.rect(screen, color, (col * GRID_SIZE, row * GRID_SIZE, GRID_SIZE, GRID_SIZE))
 
 
 def toggle_obstacle(row, col):
@@ -340,15 +392,14 @@ def hard_clean_grid(grid):
             grid[i][j]=0
 
 
-
-
 grid = [[0 for _ in range(COLS)] for _ in range(ROWS)]
-running = True
+
 mouse_pressed = False 
-
-
+running = True
+fullscreen = True
 while running:
     screen.fill(BLACK)
+    draw_grid()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -364,27 +415,30 @@ while running:
             toggle_obstacle(row, col)
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_1: 
-                path_list = main(grid,1,screen,GRID_SIZE,(0,0),(ROWS-1,COLS-1))
+                path_list = backend_main(grid,1,screen,GRID_SIZE,(0,0),(ROWS-1,COLS-1))
                 update_gird_with_path(grid,path_list)
             elif event.key == pygame.K_2: 
-                path_list = main(grid,2,screen,GRID_SIZE,(0,0),(ROWS-1,COLS-1))
+                path_list = backend_main(grid,2,screen,GRID_SIZE,(0,0),(ROWS-1,COLS-1))
                 update_gird_with_path(grid,path_list)
             elif event.key == pygame.K_3:  
-                path_list = main(grid,3,screen,GRID_SIZE,(0,0),(ROWS-1,COLS-1))
+                path_list = backend_main(grid,3,screen,GRID_SIZE,(0,0),(ROWS-1,COLS-1))
                 update_gird_with_path(grid,path_list)
             elif event.key == pygame.K_4:  
-                path_list = main(grid,4,screen,GRID_SIZE,(0,0),(ROWS-1,COLS-1))
+                path_list = backend_main(grid,4,screen,GRID_SIZE,(0,0),(ROWS-1,COLS-1))
                 update_gird_with_path(grid,path_list)
             elif event.key == pygame.K_c: 
-                    clean_grid(grid) 
+                clean_grid(grid) 
             elif event.key == pygame.K_h:
                 hard_clean_grid(grid)
             elif event.key == pygame.K_f:
+                fullscreen = not fullscreen
+                pygame.display.toggle_fullscreen()
+            elif event.key == pygame.K_g:
                 grid = [[-1 for _ in range(COLS)] for _ in range(ROWS)]
                 generate_maze(grid)
                 grid[0][0]=0
                 grid[0][1]=0
-
-    draw_grid()
     pygame.display.flip()
-pygame.quit()
+    if not running:
+        pygame.quit()
+
