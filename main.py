@@ -21,7 +21,7 @@ Features
 Grid Values
 -----------
     0: Walkable path (Black)
-    1: Wall/obstacle (White)
+    -1: Wall/obstacle (White)
     2: Final path (Dark Red)
     3: Start marker (Green)
     4: End marker (Red)
